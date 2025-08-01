@@ -5,13 +5,15 @@ import * as d3 from 'd3';
 import { useMagickStore } from '../store/useMagickStore';
 import { GnosisMethod } from '../types';
 import toast from 'react-hot-toast';
-import { Sparkles, Zap } from 'lucide-react';
+import { Sparkles, Zap, Eye } from 'lucide-react';
+import SigilTransformationVisualizer from './SigilTransformationVisualizer';
 
 const SigilCreator = () => {
     const [statement, setStatement] = useState('');
     const [gnosisMethod, setGnosisMethod] = useState<GnosisMethod>('meditation');
     const [paradigm, setParadigm] = useState('chaos');
     const [sigilPath, setSigilPath] = useState<string>('');
+    const [showVisualizer, setShowVisualizer] = useState(false);
 
     const addSigil = useMagickStore((state) => state.addSigil);
 
@@ -32,10 +34,6 @@ const SigilCreator = () => {
         const uniqueLetters = [...new Set(processedStatement)].join('');
 
         // 4. Generate abstract sigil from remaining letters
-        const svg = d3.create('svg')
-            .attr('width', 200)
-            .attr('height', 200);
-
         // Create a force-directed layout for the sigil
         const nodes = uniqueLetters.split('').map((letter, i) => ({
             id: letter,
@@ -54,9 +52,9 @@ const SigilCreator = () => {
         }
 
         // Create path data
-        const line = d3.line()
-            .x((d: any) => d.x)
-            .y((d: any) => d.y)
+        const line = d3.line<{x: number, y: number}>()
+            .x((d) => d.x)
+            .y((d) => d.y)
             .curve(d3.curveBasis);
 
         // Generate abstract sigil path
@@ -166,16 +164,34 @@ const SigilCreator = () => {
                     />
                 </div>
 
-                {/* Generate Button */}
-                <motion.button
-                    onClick={generateSigil}
-                    className="w-full px-6 py-3 bg-sigil-cyan rounded-lg font-semibold hover:bg-sigil-cyan/80 transition-colors flex items-center justify-center gap-2"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                >
-                    <Zap size={20} />
-                    Generate Sigil
-                </motion.button>
+                {/* Generate Buttons */}
+                <div className="flex gap-4">
+                    <motion.button
+                        onClick={generateSigil}
+                        className="flex-1 px-6 py-3 bg-sigil-cyan rounded-lg font-semibold hover:bg-sigil-cyan/80 transition-colors flex items-center justify-center gap-2"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Zap size={20} />
+                        Generate Sigil
+                    </motion.button>
+                    
+                    <motion.button
+                        onClick={() => {
+                            if (!statement.trim()) {
+                                toast.error('Please enter a statement of intent');
+                                return;
+                            }
+                            setShowVisualizer(true);
+                        }}
+                        className="flex-1 px-6 py-3 bg-chaos-purple rounded-lg font-semibold hover:bg-chaos-purple/80 transition-colors flex items-center justify-center gap-2"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Eye size={20} />
+                        Visualize Transformation
+                    </motion.button>
+                </div>
 
                 {/* Sigil Preview */}
                 {sigilPath && (
@@ -207,6 +223,44 @@ const SigilCreator = () => {
                         >
                             Save Sigil to Collection
                         </motion.button>
+                    </motion.div>
+                )}
+
+                {/* Transformation Visualizer Modal */}
+                {showVisualizer && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="fixed inset-0 bg-void-black/90 backdrop-blur-lg z-50 flex items-center justify-center p-8"
+                        onClick={() => setShowVisualizer(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            className="bg-void-black/80 rounded-xl border border-chaos-purple/30 p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-3xl font-bold">Sigil Transformation Process</h2>
+                                <motion.button
+                                    onClick={() => setShowVisualizer(false)}
+                                    className="text-gray-400 hover:text-white"
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                >
+                                    ✕
+                                </motion.button>
+                            </div>
+                            
+                            <SigilTransformationVisualizer
+                                statement={statement}
+                                onComplete={(path) => {
+                                    setSigilPath(path);
+                                    setShowVisualizer(false);
+                                    toast.success('Sigil transformation complete!');
+                                }}
+                            />
+                        </motion.div>
                     </motion.div>
                 )}
             </div>
