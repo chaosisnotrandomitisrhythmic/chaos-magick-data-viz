@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-void-black text-astral-white;
+    }
+}
+
+@layer utilities {
+    .glow-sigil {
+        filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.5));
+    }
+
+    .neon-text {
+        text-shadow:
+            0 0 7px rgba(147, 51, 234, 0.8),
+            0 0 10px rgba(147, 51, 234, 0.8),
+            0 0 21px rgba(147, 51, 234, 0.8);
+    }
+}
