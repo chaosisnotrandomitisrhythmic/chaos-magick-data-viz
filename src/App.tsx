@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Moon, Network, BarChart3, Zap, Eye } from 'lucide-react';
+import { Sparkles, Moon, Network, Zap, Eye } from 'lucide-react';
 import SigilCreator from './components/SigilCreator';
 import SigilGallery from './components/SigilGallery';
 import GnosisHeatmap from './components/GnosisHeatmap';
