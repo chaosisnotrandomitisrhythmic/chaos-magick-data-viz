@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Sparkles, Moon, Network, Zap, Eye } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import SigilCreator from './components/SigilCreator';
 import SigilGallery from './components/SigilGallery';
 import GnosisHeatmap from './components/GnosisHeatmap';
@@ -13,105 +11,197 @@ type View = 'sigils' | 'gnosis' | 'synchronicity' | 'tunnels' | 'servitors';
 function App() {
     const [currentView, setCurrentView] = useState<View>('sigils');
     const [showCreator, setShowCreator] = useState(false);
+    const [terminalText, setTerminalText] = useState('');
+    const [showCursor, setShowCursor] = useState(true);
 
-    const navItems = [
-        { id: 'sigils' as View, label: 'Sigils', icon: Sparkles },
-        { id: 'gnosis' as View, label: 'Gnosis States', icon: Moon },
-        { id: 'synchronicity' as View, label: 'Synchronicity Web', icon: Network },
-        { id: 'tunnels' as View, label: 'Reality Tunnels', icon: Eye },
-        { id: 'servitors' as View, label: 'Servitors', icon: Zap },
+    const asciiHeader = `
+╔═══════════════════════════════════════════════════════════════════╗
+║  ███████╗██╗ ██████╗ ██╗██╗         ████████╗██████╗  ██████╗   ║
+║  ██╔════╝██║██╔════╝ ██║██║         ╚══██╔══╝██╔══██╗██╔════╝   ║
+║  ███████╗██║██║  ███╗██║██║            ██║   ██████╔╝██║        ║
+║  ╚════██║██║██║   ██║██║██║            ██║   ██╔══██╗██║        ║
+║  ███████║██║╚██████╔╝██║███████╗       ██║   ██║  ██║╚██████╗   ║
+║  ╚══════╝╚═╝ ╚═════╝ ╚═╝╚══════╝       ╚═╝   ╚═╝  ╚═╝ ╚═════╝   ║
+╚═══════════════════════════════════════════════════════════════════╝`;
+
+    const menuItems = [
+        { id: 'sigils' as View, label: '[1] SIGILS', cmd: '1' },
+        { id: 'gnosis' as View, label: '[2] GNOSIS_STATES', cmd: '2' },
+        { id: 'synchronicity' as View, label: '[3] SYNC_WEB', cmd: '3' },
+        { id: 'tunnels' as View, label: '[4] REALITY_TUNNELS', cmd: '4' },
+        { id: 'servitors' as View, label: '[5] SERVITORS', cmd: '5' },
     ];
 
+    useEffect(() => {
+        const text = `INITIALIZING CHAOS_MAGICK_SYSTEM v2.0.0...
+[OK] LOADING SIGIL_ENGINE...
+[OK] CONNECTING TO ASTRAL_PLANE...
+[OK] SYNCHRONICITY_DETECTOR ONLINE...
+[OK] REALITY_TUNNEL_NAVIGATOR READY...
+
+SYSTEM READY. SELECT MODULE:`;
+
+        let index = 0;
+        const timer = setInterval(() => {
+            if (index < text.length) {
+                setTerminalText(text.slice(0, index + 1));
+                index++;
+            } else {
+                clearInterval(timer);
+            }
+        }, 20);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        const cursorTimer = setInterval(() => {
+            setShowCursor(prev => !prev);
+        }, 500);
+        return () => clearInterval(cursorTimer);
+    }, []);
+
     return (
-        <div className="min-h-screen bg-void-black text-astral-white">
+        <div className="min-h-screen bg-terminal-bg text-terminal-green p-4 terminal-grid">
             <Toaster
                 position="top-center"
                 toastOptions={{
                     style: {
-                        background: '#1a1a1a',
-                        color: '#f0f9ff',
-                        border: '1px solid #9333ea',
+                        background: '#000000',
+                        color: '#00ff00',
+                        border: '1px solid #00ff00',
+                        borderRadius: '0',
+                        fontFamily: 'VT323, monospace',
+                        fontSize: '18px',
+                        textTransform: 'uppercase',
                     },
                 }}
             />
 
-            {/* Header */}
-            <header className="border-b border-chaos-purple/30 backdrop-blur-lg bg-void-black/80 sticky top-0 z-50">
-                <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-                    <motion.h1
-                        className="text-2xl font-bold neon-text"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                    >
-                        🌀 Sigil Resonance Tracker
-                    </motion.h1>
+            <div className="max-w-6xl mx-auto">
+                {/* ASCII Header */}
+                <pre className="text-terminal-green text-center mb-4 text-xs sm:text-sm md:text-base glow-green">
+                    {asciiHeader}
+                </pre>
 
-                    <nav className="flex gap-6">
-                        {navItems.map((item) => {
-                            const Icon = item.icon;
-                            return (
-                                <motion.button
+                {/* Terminal Window */}
+                <div className="terminal-window mb-6">
+                    <div className="terminal-header">
+                        <span>CHAOS_MAGICK_TERMINAL</span>
+                        <span className="text-xs">
+                            <span className="text-terminal-amber">[●]</span>
+                            <span className="text-terminal-green ml-1">[●]</span>
+                            <span className="text-terminal-cyan ml-1">[●]</span>
+                        </span>
+                    </div>
+
+                    <div className="font-mono text-sm mb-4">
+                        <pre className="whitespace-pre-wrap">{terminalText}</pre>
+                        {showCursor && <span className="animate-blink">_</span>}
+                    </div>
+
+                    {/* Navigation */}
+                    <div className="border-t border-terminal-green pt-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                            {menuItems.map((item) => (
+                                <button
                                     key={item.id}
                                     onClick={() => setCurrentView(item.id)}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${currentView === item.id
-                                            ? 'bg-chaos-purple/20 text-chaos-purple border border-chaos-purple'
-                                            : 'hover:bg-chaos-purple/10'
+                                    className={`terminal-button text-sm ${currentView === item.id
+                                            ? 'bg-terminal-green text-terminal-bg'
+                                            : ''
                                         }`}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    <Icon size={18} />
-                                    <span className="hidden md:inline">{item.label}</span>
-                                </motion.button>
-                            );
-                        })}
-                    </nav>
+                                    {item.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </header>
 
-            {/* Main Content */}
-            <main className="container mx-auto px-4 py-8">
-                <motion.div
-                    key={currentView}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                >
-                    {currentView === 'sigils' && (
-                        <div className="space-y-6">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-3xl font-bold">Sigil Collection</h2>
-                                <motion.button
-                                    onClick={() => setShowCreator(!showCreator)}
-                                    className="px-6 py-3 bg-chaos-purple rounded-lg font-semibold hover:bg-chaos-purple/80 transition-colors"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    {showCreator ? 'View Gallery' : 'Create New Sigil'}
-                                </motion.button>
+                {/* Main Content Area */}
+                <div className="terminal-window">
+                    <div className="terminal-header">
+                        <span>MODULE: {currentView.toUpperCase()}</span>
+                        <span className="text-xs animate-pulse">◼ REC</span>
+                    </div>
+
+                    <div className="min-h-[400px]">
+                        {currentView === 'sigils' && (
+                            <div>
+                                <div className="mb-4 pb-4 border-b border-terminal-green">
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-xl font-bold uppercase">
+                                            &gt; SIGIL_COLLECTION
+                                        </h2>
+                                        <button
+                                            onClick={() => setShowCreator(!showCreator)}
+                                            className="terminal-button text-sm"
+                                        >
+                                            {showCreator ? '[VIEW_GALLERY]' : '[CREATE_NEW]'}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {showCreator ? <SigilCreator /> : <SigilGallery />}
                             </div>
+                        )}
 
-                            {showCreator ? <SigilCreator /> : <SigilGallery />}
-                        </div>
-                    )}
+                        {currentView === 'gnosis' && (
+                            <div>
+                                <h2 className="text-xl font-bold uppercase mb-4">
+                                    &gt; GNOSIS_STATE_MONITOR
+                                </h2>
+                                <GnosisHeatmap />
+                            </div>
+                        )}
 
-                    {currentView === 'gnosis' && <GnosisHeatmap />}
-                    {currentView === 'synchronicity' && <SynchronicityWeb />}
-                    {currentView === 'tunnels' && <RealityTunnelNav />}
-                    {currentView === 'servitors' && (
-                        <div className="text-center py-20">
-                            <h2 className="text-3xl font-bold mb-4">Servitor Dashboard</h2>
-                            <p className="text-gray-400">Coming soon... The digital familiars await.</p>
-                        </div>
-                    )}
-                </motion.div>
-            </main>
+                        {currentView === 'synchronicity' && (
+                            <div>
+                                <h2 className="text-xl font-bold uppercase mb-4">
+                                    &gt; SYNCHRONICITY_NETWORK
+                                </h2>
+                                <SynchronicityWeb />
+                            </div>
+                        )}
 
-            {/* Ambient Background Effect */}
-            <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-chaos-purple/10 rounded-full blur-3xl animate-float" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-sigil-cyan/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
+                        {currentView === 'tunnels' && (
+                            <div>
+                                <h2 className="text-xl font-bold uppercase mb-4">
+                                    &gt; REALITY_TUNNEL_NAVIGATOR
+                                </h2>
+                                <RealityTunnelNav />
+                            </div>
+                        )}
+
+                        {currentView === 'servitors' && (
+                            <div className="text-center py-20">
+                                <pre className="text-terminal-amber mb-4">
+                                    {`    ___________
+   /           \\
+  /   [ERROR]   \\
+ /_______________\\
+ |  MODULE NOT   |
+ |   AVAILABLE   |
+ |_______________|`}
+                                </pre>
+                                <p className="text-terminal-amber uppercase animate-blink">
+                                    &gt; SERVITOR_MODULE_OFFLINE
+                                </p>
+                                <p className="text-terminal-green mt-2">
+                                    DIGITAL_FAMILIARS AWAIT INITIALIZATION...
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Status Bar */}
+                <div className="terminal-window mt-4 flex justify-between items-center text-xs">
+                    <span>USER: CHAOS_PRACTITIONER</span>
+                    <span>REALITY_FLUX: {Math.floor(Math.random() * 100)}%</span>
+                    <span>SYSTEM_TIME: {new Date().toLocaleTimeString()}</span>
+                </div>
             </div>
         </div>
     );

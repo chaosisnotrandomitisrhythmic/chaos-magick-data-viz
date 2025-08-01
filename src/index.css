@@ -1,107 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
     body {
-        @apply bg-void-black text-astral-white;
+        @apply bg-terminal-bg text-terminal-green font-mono;
+        font-family: 'VT323', 'Courier New', monospace;
+        font-size: 18px;
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        overflow-x: hidden;
+    }
+
+    /* CRT Monitor Effect */
+    body::before {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        z-index: 2;
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+    }
+
+    /* Scanline effect */
+    body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+        background-size: 100% 4px;
+        z-index: 1;
+        pointer-events: none;
+        animation: scanline 8s linear infinite;
+    }
+}
+
+@layer components {
+    .terminal-window {
+        @apply bg-terminal-dark border-2 border-terminal-green rounded-none p-4;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+
+    .terminal-header {
+        @apply bg-terminal-gray text-terminal-green px-2 py-1 mb-4 flex items-center justify-between;
+        border: 1px solid #00ff00;
+    }
+
+    .terminal-button {
+        @apply px-4 py-2 bg-transparent border border-terminal-green text-terminal-green uppercase tracking-wider;
+        transition: all 0.1s;
+    }
+
+    .terminal-button:hover {
+        @apply bg-terminal-green text-terminal-bg;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    }
+
+    .terminal-input {
+        @apply bg-transparent border border-terminal-green text-terminal-green px-2 py-1 outline-none;
+        font-family: inherit;
+    }
+
+    .terminal-input:focus {
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+
+    .terminal-prompt::before {
+        content: "> ";
+        @apply text-terminal-green;
+    }
+
+    .terminal-text {
+        @apply text-terminal-green;
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+
+    .terminal-link {
+        @apply text-terminal-cyan underline;
+    }
+
+    .terminal-link:hover {
+        @apply text-terminal-white;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    }
+
+    .ascii-border {
+        border: 1px solid #00ff00;
+        position: relative;
+    }
+
+    .ascii-border::before {
+        content: "+";
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        color: #00ff00;
+    }
+
+    .ascii-border::after {
+        content: "+";
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        color: #00ff00;
+    }
+
+    .blink-cursor::after {
+        content: "_";
+        @apply animate-blink text-terminal-green;
     }
 }
 
 @layer utilities {
-    .glow-sigil {
-        filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.5));
+    .glow-green {
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
     }
 
-    .neon-text {
-        text-shadow:
-            0 0 7px rgba(147, 51, 234, 0.8),
-            0 0 10px rgba(147, 51, 234, 0.8),
-            0 0 21px rgba(147, 51, 234, 0.8);
+    .glow-amber {
+        text-shadow: 0 0 10px rgba(255, 176, 0, 0.8);
     }
-    
-    .glow-text {
-        text-shadow: 0 0 10px currentColor;
+
+    .terminal-grid {
+        background-image:
+            repeating-linear-gradient(0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 0, 0.03) 2px,
+                rgba(0, 255, 0, 0.03) 4px),
+            repeating-linear-gradient(90deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 0, 0.03) 2px,
+                rgba(0, 255, 0, 0.03) 4px);
     }
-    
-    .animate-pulse-sigil {
-        animation: pulse-sigil 2s ease-in-out infinite;
+
+    .crt-flicker {
+        animation: flicker 0.15s infinite;
     }
-    
-    .animate-float {
-        animation: float 6s ease-in-out infinite;
-    }
-    
-    .letter-morph {
-        animation: letterMorph 3s ease-in-out forwards;
-    }
-    
-    .shape-combine {
-        animation: shapeCombine 2s ease-in-out forwards;
-    }
-    
-    .sigil-manifest {
-        animation: sigilManifest 3s ease-in-out forwards;
+
+    .terminal-glow {
+        box-shadow:
+            0 0 5px #00ff00,
+            0 0 10px #00ff00,
+            0 0 15px #00ff00,
+            0 0 20px #00ff00;
     }
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-}
-
-@keyframes pulse-sigil {
-    0%, 100% { 
-        opacity: 0.8;
-        filter: drop-shadow(0 0 10px currentColor);
+/* ASCII Art Animations */
+@keyframes typing {
+    from {
+        width: 0;
     }
-    50% { 
-        opacity: 1;
-        filter: drop-shadow(0 0 20px currentColor);
+
+    to {
+        width: 100%;
     }
 }
 
-@keyframes letterMorph {
-    0% { 
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-    }
-    50% { 
-        transform: scale(1.2) rotate(180deg);
-        opacity: 0.6;
-    }
-    100% { 
-        transform: scale(1) rotate(360deg);
-        opacity: 1;
-    }
+/* Terminal Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
 }
 
-@keyframes shapeCombine {
-    0% { 
-        transform: translate(0, 0) scale(1);
-        opacity: 0.5;
-    }
-    50% { 
-        transform: translate(var(--tx), var(--ty)) scale(1.1);
-        opacity: 0.8;
-    }
-    100% { 
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
+::-webkit-scrollbar-track {
+    background: #000000;
+    border: 1px solid #00ff00;
 }
 
-@keyframes sigilManifest {
-    0% { 
+::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border: 1px solid #000000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #33ff33;
+}
+
+/* Remove all rounded corners for authentic terminal look */
+* {
+    border-radius: 0 !important;
+}
+
+/* Sigil drawing animation */
+@keyframes sigilDraw {
+    from {
         stroke-dashoffset: 1000;
-        opacity: 0;
     }
-    50% { 
-        stroke-dashoffset: 500;
-        opacity: 0.5;
-    }
-    100% { 
+
+    to {
         stroke-dashoffset: 0;
-        opacity: 1;
     }
 }
