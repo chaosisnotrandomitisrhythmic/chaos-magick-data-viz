@@ -31,6 +31,18 @@
     .animate-float {
         animation: float 6s ease-in-out infinite;
     }
+    
+    .letter-morph {
+        animation: letterMorph 3s ease-in-out forwards;
+    }
+    
+    .shape-combine {
+        animation: shapeCombine 2s ease-in-out forwards;
+    }
+    
+    .sigil-manifest {
+        animation: sigilManifest 3s ease-in-out forwards;
+    }
 }
 
 @keyframes float {
@@ -46,5 +58,50 @@
     50% { 
         opacity: 1;
         filter: drop-shadow(0 0 20px currentColor);
+    }
+}
+
+@keyframes letterMorph {
+    0% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.2) rotate(180deg);
+        opacity: 0.6;
+    }
+    100% { 
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+    }
+}
+
+@keyframes shapeCombine {
+    0% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+    50% { 
+        transform: translate(var(--tx), var(--ty)) scale(1.1);
+        opacity: 0.8;
+    }
+    100% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes sigilManifest {
+    0% { 
+        stroke-dashoffset: 1000;
+        opacity: 0;
+    }
+    50% { 
+        stroke-dashoffset: 500;
+        opacity: 0.5;
+    }
+    100% { 
+        stroke-dashoffset: 0;
+        opacity: 1;
     }
 }
