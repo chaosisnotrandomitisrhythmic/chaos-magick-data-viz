@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a React TypeScript application for chaos magick data visualization, built with Vite and featuring complex interactive visualizations using D3.js and Three.js. The app uses a distinctive terminal/cyberpunk aesthetic with CRT monitor effects.
+This is a React TypeScript application for chaos magick data visualization, built with Vite and featuring minimalist, TOPY-inspired visualizations. The app embodies the principle "chaos is not random, it is rhythmic" through ultra-minimal sigil generation and stark black/white aesthetics.
 
 ## Development Commands
 
@@ -31,8 +31,8 @@ npm run lint
 - **Frontend Framework**: React 18 with TypeScript
 - **Build Tool**: Vite
 - **State Management**: Zustand with persistence middleware
-- **Styling**: Tailwind CSS with custom terminal theme
-- **Data Visualization**: D3.js for 2D graphs, Three.js for 3D
+- **Styling**: Tailwind CSS with brutalist black/white theme
+- **Data Visualization**: D3.js for minimal geometric forms
 - **Animations**: Framer Motion
 - **Data Storage**: IndexedDB via 'idb' library
 - **Icons**: lucide-react
@@ -42,19 +42,20 @@ npm run lint
 ```
 src/
 ├── components/          # React components
-│   ├── SigilCreator.tsx        # D3.js sigil generation
+│   ├── SigilCreator.tsx        # Minimal rhythmic sigil generation
 │   ├── SigilGallery.tsx        # Display sigil collection
 │   ├── GnosisHeatmap.tsx       # Calendar visualization
 │   ├── SynchronicityWeb.tsx    # Force-directed network graph
 │   ├── RealityTunnelNav.tsx    # 3D paradigm visualization
 │   ├── ServitorPanel.tsx       # Servitor management
+│   ├── SigilTransformationVisualizer.tsx  # Rhythmic transformation steps
 │   └── TOPYLogo.tsx           # Temple of Psychick Youth logo
 ├── store/              # Zustand state management
-│   └── useStore.ts     # Main store with persistence
+│   └── useMagickStore.ts     # Main store with persistence
 ├── types/              # TypeScript interfaces
 │   └── index.ts        # Core data models
-├── utils/              # Utility functions
-│   └── indexedDB.ts    # Database operations
+├── hooks/              # Custom React hooks
+│   └── useTransformationSound.ts  # Audio feedback
 └── App.tsx             # Main app with minimal black/white UI
 ```
 
@@ -71,42 +72,72 @@ The application uses complex TypeScript interfaces defined in `src/types/index.t
 
 ### State Management Pattern
 
-The app uses Zustand with persistence middleware (`src/store/useStore.ts`):
+The app uses Zustand with persistence middleware (`src/store/useMagickStore.ts`):
 - Centralized store for all application state
 - Automatic persistence to localStorage
 - Type-safe actions and selectors
 - Arrays for collections (sigils, servitors, etc.)
 
+### Sigil Generation Philosophy
+
+The new sigil generation system embodies "chaos is not random, it is rhythmic":
+
+1. **Minimal Line Count**: Each sigil uses only 2-6 lines maximum
+   - Chaos paradigm: Cross + optional single mark (2-3 lines)
+   - Hermetic paradigm: Triangle + optional center (3-4 lines)
+   - Shamanic paradigm: Spiral + terminus mark (2 lines)
+   - Cybernetic paradigm: Minimal circuit (4-6 lines)
+
+2. **Rhythmic Extraction**: 
+   - Extracts only the first 3 unique letters from the statement
+   - Calculates a single rhythm value (0-1) from letter positions
+   - Determines phase angle based on statement seed (8 cardinal directions)
+
+3. **Deterministic Generation**: 
+   - Same statement always produces the same sigil
+   - No random elements - pure rhythmic patterns
+   - Each mark has purpose derived from the statement
+
 ### Visualization Components
 
-1. **SigilCreator**: Transforms intent statements into geometric sigils using D3.js
-   - Letter-to-shape transformation algorithm
-   - Dynamic charge visualization
-   - SVG export capability
+1. **SigilCreator**: Ultra-minimal sigil generation
+   - Rhythmic pattern extraction from intent statements
+   - 2-6 line sigils inspired by TOPY Psychick Cross
+   - Heavy strokes with square line caps
+   - Photocopy filter effects
 
-2. **SynchronicityWeb**: Force-directed graph showing event connections
+2. **SigilTransformationVisualizer**: 4-step rhythmic visualization
+   - Statement of Intent
+   - Rhythmic Extraction (core 3 letters)
+   - Phase Alignment (rhythm & angle visualization)
+   - Sigil Manifestation (final minimal form)
+
+3. **SynchronicityWeb**: Force-directed graph showing event connections
    - D3.js force simulation
    - Interactive node dragging
    - Connection strength visualization
 
-3. **RealityTunnelNav**: 3D paradigm visualization
+4. **RealityTunnelNav**: 3D paradigm visualization
    - Three.js/React Three Fiber
    - Orbital controls
    - Animated transitions between paradigms
 
-4. **GnosisHeatmap**: Calendar-based intensity visualization
+5. **GnosisHeatmap**: Calendar-based intensity visualization
    - D3.js scales for color mapping
    - Year-view calendar grid
    - Intensity tracking over time
 
 ### Styling Approach
 
-The app uses a minimal black and white aesthetic inspired by mail art and Psychick TV:
-- Stark black (#000000) and white (#ffffff) color scheme
-- Courier New monospace font for body text
-- Arial Black/Impact for headers and display text
-- Clean geometric borders and typography
-- Subtle xerox/photocopy effects for mail art aesthetic
+The app uses a brutalist TOPY-inspired aesthetic:
+- Pure black (#000000) and white (#ffffff) only
+- Courier New monospace for body text
+- Arial Black/Impact for headers
+- Square line caps and miter joins (no rounded corners)
+- Heavy borders (2-4px) and stark contrasts
+- Photocopy/xerox filter effects
+- Uppercase text throughout
+- Grid backgrounds for zine aesthetic
 
 ### Development Considerations
 
@@ -121,7 +152,7 @@ The app uses a minimal black and white aesthetic inspired by mail art and Psychi
 **Adding a New Visualization Component**:
 1. Create component in `src/components/`
 2. Define TypeScript interfaces in `src/types/index.ts` if needed
-3. Add state management in `src/store/useStore.ts`
+3. Add state management in `src/store/useMagickStore.ts`
 4. Import and use in `App.tsx`
 
 **Modifying the Visual Theme**:
@@ -129,10 +160,11 @@ The app uses a minimal black and white aesthetic inspired by mail art and Psychi
 - Modify `src/index.css` for typography and effects
 - Update component classes using: `btn-primary`, `btn-secondary`, `input-field`, `card`, `divider`
 
-**Working with D3.js Visualizations**:
-- Use `useEffect` for D3 DOM manipulation
-- Clean up selections in effect cleanup
-- Type D3 selections properly with TypeScript
+**Working with Minimal Sigil Generation**:
+- Focus on extracting rhythmic essence, not complex transformations
+- Use deterministic calculations based on letter positions
+- Keep line count under 6 for maximum impact
+- Square line caps and miter joins for sharp, decisive marks
 
 **Three.js 3D Components**:
 - Use `@react-three/fiber` components
