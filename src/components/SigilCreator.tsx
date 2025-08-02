@@ -181,34 +181,34 @@ const SigilCreator = () => {
 
     return (
         <div className="space-y-6">
-            <div className="terminal-window">
-                <div className="terminal-header">
-                    <span>SIGIL_GENERATOR_v2.0</span>
+            <div className="card">
+                <div className="divider">
+                    <span className="font-bold uppercase tracking-wider">SIGIL_GENERATOR_v2.0</span>
                 </div>
 
                 <div className="space-y-4">
                     {/* Statement Input */}
                     <div>
-                        <label className="block text-terminal-green mb-2 uppercase text-sm">
-                            &gt; STATEMENT_OF_INTENT:
+                        <label className="block text-black mb-2 uppercase text-sm font-bold">
+                            STATEMENT_OF_INTENT:
                         </label>
                         <textarea
                             value={statement}
                             onChange={(e) => setStatement(e.target.value)}
-                            className="terminal-input w-full h-24 resize-none"
+                            className="input-field w-full h-24 resize-none"
                             placeholder="ENTER YOUR WILL..."
                         />
                     </div>
 
                     {/* Gnosis Method */}
                     <div>
-                        <label className="block text-terminal-green mb-2 uppercase text-sm">
-                            &gt; GNOSIS_METHOD:
+                        <label className="block text-black mb-2 uppercase text-sm font-bold">
+                            GNOSIS_METHOD:
                         </label>
                         <select
                             value={gnosisMethod}
                             onChange={(e) => setGnosisMethod(e.target.value as GnosisMethod)}
-                            className="terminal-input w-full"
+                            className="input-field w-full"
                         >
                             {gnosisMethods.map(method => (
                                 <option key={method.value} value={method.value}>
@@ -220,17 +220,17 @@ const SigilCreator = () => {
 
                     {/* Paradigm */}
                     <div>
-                        <label className="block text-terminal-green mb-2 uppercase text-sm">
-                            &gt; PARADIGM:
+                        <label className="block text-black mb-2 uppercase text-sm font-bold">
+                            PARADIGM:
                         </label>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                             {paradigms.map(p => (
                                 <button
                                     key={p.value}
                                     onClick={() => setParadigm(p.value)}
-                                    className={`terminal-button text-sm ${paradigm === p.value
-                                        ? 'bg-terminal-green text-terminal-bg'
-                                        : ''
+                                    className={`text-sm ${paradigm === p.value
+                                        ? 'btn-primary'
+                                        : 'btn-secondary'
                                         }`}
                                 >
                                     {p.label}
@@ -243,23 +243,23 @@ const SigilCreator = () => {
                     <div className="flex gap-4 pt-4">
                         <button
                             onClick={generateSigil}
-                            className="terminal-button flex-1"
+                            className="btn-primary flex-1"
                         >
-                            [GENERATE]
+                            GENERATE
                         </button>
                         <button
                             onClick={() => setShowVisualizer(!showVisualizer)}
-                            className="terminal-button flex-1"
+                            className="btn-secondary flex-1"
                             disabled={!statement}
                         >
-                            [VISUALIZE]
+                            VISUALIZE
                         </button>
                         <button
                             onClick={chargeSigil}
-                            className="terminal-button flex-1"
+                            className="btn-primary flex-1"
                             disabled={!sigilPath}
                         >
-                            [CHARGE]
+                            CHARGE
                         </button>
                     </div>
                 </div>
@@ -267,10 +267,10 @@ const SigilCreator = () => {
 
             {/* Sigil Display */}
             {sigilPath && (
-                <div className="terminal-window">
-                    <div className="terminal-header">
-                        <span>SIGIL_OUTPUT</span>
-                        <span className="text-xs text-terminal-amber animate-pulse">
+                <div className="card">
+                    <div className="divider flex justify-between items-center">
+                        <span className="font-bold uppercase tracking-wider">SIGIL_OUTPUT</span>
+                        <span className="text-xs text-black animate-pulse">
                             ◉ TRANSMITTING
                         </span>
                     </div>
@@ -280,7 +280,7 @@ const SigilCreator = () => {
                                 width="200"
                                 height="200"
                                 viewBox="0 0 200 200"
-                                className="border border-terminal-green"
+                                className="border-2 border-black"
                                 style={{
                                     filter: 'contrast(1.5) brightness(1.2)',
                                 }}
@@ -288,7 +288,7 @@ const SigilCreator = () => {
                                 {/* Background grid */}
                                 <defs>
                                     <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#00ff00" strokeWidth="0.5" opacity="0.2" />
+                                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#000000" strokeWidth="0.5" opacity="0.2" />
                                     </pattern>
                                 </defs>
                                 <rect width="200" height="200" fill="url(#grid)" />
@@ -297,11 +297,9 @@ const SigilCreator = () => {
                                 <path
                                     d={sigilPath}
                                     fill="none"
-                                    stroke="#00ff00"
+                                    stroke="#000000"
                                     strokeWidth="2"
-                                    className="glow-green"
                                     style={{
-                                        filter: 'drop-shadow(0 0 5px #00ff00)',
                                         strokeDasharray: '1000',
                                         strokeDashoffset: '0',
                                         animation: 'sigilDraw 3s ease-out',
@@ -312,44 +310,35 @@ const SigilCreator = () => {
                                 <path
                                     d={sigilPath}
                                     fill="none"
-                                    stroke="#ffb000"
+                                    stroke="#000000"
                                     strokeWidth="1"
-                                    opacity="0.5"
+                                    opacity="0.3"
                                     style={{
-                                        filter: 'drop-shadow(0 0 3px #ffb000)',
                                         transform: 'translate(2px, -2px)',
                                     }}
                                 />
                                 <path
                                     d={sigilPath}
                                     fill="none"
-                                    stroke="#00ffff"
+                                    stroke="#000000"
                                     strokeWidth="1"
-                                    opacity="0.5"
+                                    opacity="0.3"
                                     style={{
-                                        filter: 'drop-shadow(0 0 3px #00ffff)',
                                         transform: 'translate(-2px, 2px)',
                                     }}
                                 />
                             </svg>
                         </div>
 
-                        {/* ASCII frame */}
-                        <div className="absolute top-0 left-0 right-0 text-center text-xs text-terminal-green opacity-50">
-                            +----------------------------------+
-                        </div>
-                        <div className="absolute bottom-0 left-0 right-0 text-center text-xs text-terminal-green opacity-50">
-                            +----------------------------------+
-                        </div>
 
                         <div className="text-center space-y-2 pb-4">
-                            <div className="text-xs text-terminal-amber uppercase">
+                            <div className="text-xs text-black uppercase font-bold">
                                 SIGIL GENERATED - READY FOR CHARGING
                             </div>
-                            <div className="text-xs text-terminal-green">
+                            <div className="text-xs text-black">
                                 PSYCHICK CROSS PROTOCOL: ACTIVE
                             </div>
-                            <div className="text-xs text-terminal-cyan">
+                            <div className="text-xs text-black">
                                 REALITY FREQUENCY: {Math.floor(Math.random() * 900 + 100)}Hz
                             </div>
                         </div>
@@ -361,9 +350,9 @@ const SigilCreator = () => {
 
             {/* Transformation Visualizer */}
             {showVisualizer && statement && (
-                <div className="terminal-window">
-                    <div className="terminal-header">
-                        <span>TRANSFORMATION_VISUALIZER</span>
+                <div className="card">
+                    <div className="divider">
+                        <span className="font-bold uppercase tracking-wider">TRANSFORMATION_VISUALIZER</span>
                     </div>
                     <SigilTransformationVisualizer statement={statement} />
                 </div>

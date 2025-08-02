@@ -23,24 +23,24 @@ const GnosisHeatmap = () => {
     };
 
     return (
-        <div className="terminal-window">
-            <div className="terminal-header">
-                <span>GNOSIS_STATE_ANALYZER</span>
+        <div className="card">
+            <div className="divider">
+                <span className="font-bold uppercase tracking-wider">GNOSIS_STATE_ANALYZER</span>
             </div>
 
             <div className="p-4">
                 <div className="mb-4">
-                    <p className="text-terminal-green mb-2">
-                        &gt; BIORHYTHM ANALYSIS COMPLETE
+                    <p className="text-black mb-2 font-bold">
+                        BIORHYTHM ANALYSIS COMPLETE
                     </p>
-                    <p className="text-terminal-amber text-sm">
+                    <p className="text-black text-sm">
                         OPTIMAL GNOSIS WINDOWS DETECTED
                     </p>
                 </div>
 
                 {/* ASCII Heatmap */}
                 <div className="overflow-x-auto">
-                    <pre className="text-xs text-terminal-green">
+                    <pre className="text-xs text-black font-mono">
                         <div className="mb-2">
                             {'    ' + hours.map(h => h.toString().padStart(2, '0')).join(' ')}
                         </div>
@@ -54,10 +54,10 @@ const GnosisHeatmap = () => {
                     </pre>
                 </div>
 
-                <div className="mt-4 border-t border-terminal-green pt-4">
+                <div className="mt-4 border-t-2 border-black pt-4">
                     <div className="grid grid-cols-2 gap-4 text-xs">
                         <div>
-                            <span className="text-terminal-cyan">LEGEND:</span>
+                            <span className="text-black font-bold">LEGEND:</span>
                             <div className="mt-1 space-y-1">
                                 <div>[█] PEAK_STATE (80-100%)</div>
                                 <div>[▓] HIGH_STATE (60-80%)</div>
@@ -67,7 +67,7 @@ const GnosisHeatmap = () => {
                             </div>
                         </div>
                         <div>
-                            <span className="text-terminal-cyan">STATS:</span>
+                            <span className="text-black font-bold">STATS:</span>
                             <div className="mt-1 space-y-1">
                                 <div>PEAK_HOURS: {Math.floor(Math.random() * 5 + 2)}</div>
                                 <div>AVG_INTENSITY: {(Math.random() * 0.5 + 0.3).toFixed(2)}</div>

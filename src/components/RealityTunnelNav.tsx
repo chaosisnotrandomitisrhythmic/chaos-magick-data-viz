@@ -9,28 +9,28 @@ const RealityTunnelNav = () => {
             name: 'CONSENSUS_REALITY',
             beliefs: ['MATERIALISM', 'LINEAR_TIME', 'CAUSALITY'],
             stability: 95,
-            color: 'text-terminal-gray'
+            color: 'text-black opacity-50'
         },
         {
             id: 'CHAOS',
             name: 'CHAOS_PARADIGM',
             beliefs: ['BELIEF_AS_TOOL', 'NOTHING_TRUE', 'EVERYTHING_PERMITTED'],
             stability: 42,
-            color: 'text-terminal-green'
+            color: 'text-black'
         },
         {
             id: 'QUANTUM',
             name: 'QUANTUM_MYSTICISM',
             beliefs: ['OBSERVER_EFFECT', 'ENTANGLEMENT', 'PROBABILITY_WAVES'],
             stability: 68,
-            color: 'text-terminal-cyan'
+            color: 'text-black'
         },
         {
             id: 'ANIMIST',
             name: 'ANIMIST_WORLDVIEW',
             beliefs: ['SPIRIT_IN_ALL', 'SACRED_NATURE', 'ANCESTOR_WISDOM'],
             stability: 77,
-            color: 'text-terminal-amber'
+            color: 'text-black'
         },
     ];
 
@@ -53,10 +53,10 @@ const RealityTunnelNav = () => {
 
     return (
         <div className="space-y-4">
-            <div className="terminal-window">
-                <div className="terminal-header">
-                    <span>REALITY_TUNNEL_NAVIGATOR</span>
-                    <span className="text-xs text-terminal-amber">
+            <div className="card">
+                <div className="divider flex justify-between items-center">
+                    <span className="font-bold uppercase tracking-wider">REALITY_TUNNEL_NAVIGATOR</span>
+                    <span className="text-xs text-black">
                         CURRENT: {currentTunnel}
                     </span>
                 </div>
@@ -68,9 +68,9 @@ const RealityTunnelNav = () => {
                             <button
                                 key={tunnel.id}
                                 onClick={() => setCurrentTunnel(tunnel.id)}
-                                className={`terminal-button text-xs ${currentTunnel === tunnel.id
-                                        ? 'bg-terminal-green text-terminal-bg'
-                                        : ''
+                                className={`text-xs ${currentTunnel === tunnel.id
+                                        ? 'btn-primary'
+                                        : 'btn-secondary'
                                     }`}
                             >
                                 [{tunnel.id}]
@@ -89,8 +89,8 @@ const RealityTunnelNav = () => {
                     {selectedTunnel && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <div className="text-terminal-cyan mb-2 text-sm">
-                                    &gt; TUNNEL_PROPERTIES:
+                                <div className="text-black mb-2 text-sm font-bold">
+                                    TUNNEL_PROPERTIES:
                                 </div>
                                 <div className="space-y-1 text-xs">
                                     <div>NAME: {selectedTunnel.name}</div>
@@ -99,8 +99,8 @@ const RealityTunnelNav = () => {
                                 </div>
                             </div>
                             <div>
-                                <div className="text-terminal-cyan mb-2 text-sm">
-                                    &gt; CORE_BELIEFS:
+                                <div className="text-black mb-2 text-sm font-bold">
+                                    CORE_BELIEFS:
                                 </div>
                                 <div className="space-y-1 text-xs">
                                     {selectedTunnel.beliefs.map((belief, idx) => (
@@ -116,20 +116,20 @@ const RealityTunnelNav = () => {
             </div>
 
             {/* Warning Panel */}
-            <div className="terminal-window">
-                <div className="terminal-header bg-terminal-amber text-terminal-bg">
+            <div className="card">
+                <div className="divider bg-black text-white">
                     <span>⚠ WARNING</span>
                 </div>
                 <div className="p-4 text-xs">
-                    <p className="text-terminal-amber mb-2">
+                    <p className="text-black mb-2 font-bold">
                         REALITY_TUNNEL_SHIFT_IN_PROGRESS...
                     </p>
                     <p>
                         COGNITIVE_DISSONANCE_EXPECTED. MAINTAIN_OBSERVER_AWARENESS.
                         BELIEF_FLEXIBILITY_REQUIRED. DOGMA_INCOMPATIBLE.
                     </p>
-                    <div className="mt-4 text-terminal-green">
-                        &gt; REMEMBER: THE_MAP_IS_NOT_THE_TERRITORY
+                    <div className="mt-4 text-black font-bold">
+                        REMEMBER: THE_MAP_IS_NOT_THE_TERRITORY
                     </div>
                 </div>
             </div>

@@ -13,18 +13,13 @@ const SigilGallery = () => {
 
     if (sigils.length === 0) {
         return (
-            <div className="terminal-window">
+            <div className="card">
                 <div className="text-center py-10">
-                    <pre className="text-terminal-amber mb-4">
-                        {`    _______
-   /       \\
-  /  EMPTY  \\
- /___________\\
- NO SIGILS IN
-   DATABASE`}
-                    </pre>
-                    <p className="text-terminal-green uppercase">
-                        &gt; CREATE YOUR FIRST SIGIL TO BEGIN
+                    <p className="text-black text-center py-8 font-bold uppercase">
+                        NO SIGILS IN DATABASE
+                    </p>
+                    <p className="text-black uppercase text-center">
+                        CREATE YOUR FIRST SIGIL TO BEGIN
                     </p>
                 </div>
             </div>
@@ -36,17 +31,17 @@ const SigilGallery = () => {
             {sigils.map((sigil) => (
                 <div
                     key={sigil.id}
-                    className="terminal-window"
+                    className="card"
                 >
-                    <div className="terminal-header">
-                        <span className="text-xs">SIGIL_{sigil.id.slice(0, 8)}</span>
-                        <span className="text-xs text-terminal-amber">
+                    <div className="divider flex justify-between items-center">
+                        <span className="text-xs font-bold uppercase">SIGIL_{sigil.id.slice(0, 8)}</span>
+                        <span className="text-xs text-black">
                             PWR: {Math.floor(sigil.resonanceStrength * 100)}%
                         </span>
                     </div>
 
                     {/* Sigil Visual */}
-                    <div className="p-4 border-b border-terminal-green relative">
+                    <div className="p-4 border-b-2 border-black relative">
                         <svg
                             width="120"
                             height="120"
@@ -59,7 +54,7 @@ const SigilGallery = () => {
                             {/* Grid background */}
                             <defs>
                                 <pattern id={`grid-${sigil.id}`} width="10" height="10" patternUnits="userSpaceOnUse">
-                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#00ff00" strokeWidth="0.3" opacity="0.1" />
+                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#000000" strokeWidth="0.3" opacity="0.1" />
                                 </pattern>
                             </defs>
                             <rect width="200" height="200" fill={`url(#grid-${sigil.id})`} />
@@ -68,10 +63,10 @@ const SigilGallery = () => {
                             <path
                                 d={sigil.abstractForm}
                                 fill="none"
-                                stroke="#00ff00"
+                                stroke="#000000"
                                 strokeWidth="2"
                                 style={{
-                                    filter: `drop-shadow(0 0 ${sigil.resonanceStrength * 10}px #00ff00)`,
+                                    strokeWidth: Math.max(1, sigil.resonanceStrength * 3),
                                 }}
                             />
 
@@ -79,7 +74,7 @@ const SigilGallery = () => {
                             <path
                                 d={sigil.abstractForm}
                                 fill="none"
-                                stroke="#ffb000"
+                                stroke="#000000"
                                 strokeWidth="1"
                                 opacity={sigil.resonanceStrength * 0.3}
                                 style={{
@@ -90,7 +85,7 @@ const SigilGallery = () => {
 
                         {/* Psychick Cross indicator for charged sigils */}
                         {sigil.chargedDates.length > 3 && (
-                            <div className="absolute top-2 right-2 text-terminal-amber text-xs">
+                            <div className="absolute top-2 right-2 text-black text-xs">
                                 ✠
                             </div>
                         )}
@@ -99,28 +94,28 @@ const SigilGallery = () => {
                     {/* Sigil Info */}
                     <div className="p-4 space-y-2 text-xs font-mono">
                         <div className="flex justify-between">
-                            <span className="text-terminal-cyan">CREATED:</span>
+                            <span className="text-black font-bold">CREATED:</span>
                             <span>{format(sigil.created, 'yyyy-MM-dd')}</span>
                         </div>
 
                         <div className="flex justify-between">
-                            <span className="text-terminal-cyan">METHOD:</span>
+                            <span className="text-black font-bold">METHOD:</span>
                             <span className="uppercase">{sigil.gnosisMethod}</span>
                         </div>
 
                         <div className="flex justify-between">
-                            <span className="text-terminal-cyan">PARADIGM:</span>
+                            <span className="text-black font-bold">PARADIGM:</span>
                             <span className="uppercase">{sigil.paradigm}</span>
                         </div>
 
                         <div className="flex justify-between">
-                            <span className="text-terminal-cyan">CHARGES:</span>
+                            <span className="text-black font-bold">CHARGES:</span>
                             <span>{sigil.chargedDates.length}</span>
                         </div>
 
                         {sigil.chargedDates.length > 0 && (
                             <div className="flex justify-between">
-                                <span className="text-terminal-cyan">LAST:</span>
+                                <span className="text-black font-bold">LAST:</span>
                                 <span>
                                     {format(sigil.chargedDates[sigil.chargedDates.length - 1], 'MM/dd HH:mm')}
                                 </span>
@@ -128,8 +123,8 @@ const SigilGallery = () => {
                         )}
 
                         <div className="pt-2">
-                            <div className="text-terminal-amber mb-1">INTENT:</div>
-                            <div className="text-terminal-green text-xs break-words">
+                            <div className="text-black mb-1 font-bold">INTENT:</div>
+                            <div className="text-black text-xs break-words">
                                 {sigil.statement.slice(0, 50)}
                                 {sigil.statement.length > 50 && '...'}
                             </div>
@@ -137,12 +132,12 @@ const SigilGallery = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="p-4 border-t border-terminal-green">
+                    <div className="p-4 border-t-2 border-black">
                         <button
                             onClick={() => handleCharge(sigil.id)}
-                            className="terminal-button w-full text-xs"
+                            className="btn-primary w-full text-xs"
                         >
-                            [CHARGE_SIGIL]
+                            CHARGE_SIGIL
                         </button>
                     </div>
                 </div>
