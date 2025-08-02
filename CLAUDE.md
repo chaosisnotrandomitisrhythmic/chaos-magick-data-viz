@@ -80,37 +80,40 @@ The app uses Zustand with persistence middleware (`src/store/useMagickStore.ts`)
 
 ### Sigil Generation Philosophy
 
-The new sigil generation system embodies "chaos is not random, it is rhythmic":
+The evolved sigil generation system embodies "chaos is not random, it is rhythmic" through intricate pattern analysis:
 
-1. **Minimal Line Count**: Each sigil uses only 2-6 lines maximum
-   - Chaos paradigm: Cross + optional single mark (2-3 lines)
-   - Hermetic paradigm: Triangle + optional center (3-4 lines)
-   - Shamanic paradigm: Spiral + terminus mark (2 lines)
-   - Cybernetic paradigm: Minimal circuit (4-6 lines)
+1. **Intricate Line Count**: Each sigil uses 7-13 lines for complex rhythmic expression
+   - Chaos paradigm: Cross + radial lines + angular cuts + connections (7-13 lines)
+   - Hermetic paradigm: Dual triangles + rays + sacred geometry (7-13 lines)
+   - Shamanic paradigm: Organic spirals + power marks + cross marks (7-13 lines)
+   - Cybernetic paradigm: Complex circuit network with 3-6 nodes (7-13 lines)
 
-2. **Rhythmic Extraction**: 
-   - Extracts only the first 3 unique letters from the statement
-   - Calculates a single rhythm value (0-1) from letter positions
-   - Determines phase angle based on statement seed (8 cardinal directions)
+2. **Deep Rhythmic Extraction**: 
+   - Analyzes entire statement for letter frequencies and patterns
+   - Calculates multiple rhythm values: primary rhythm, vowel rhythm, consonant density
+   - Generates up to 13 phase angles from character positions
+   - Extracts harmonic frequencies from letter distribution
 
-3. **Deterministic Generation**: 
+3. **Unique Deterministic Generation**: 
    - Same statement always produces the same sigil
-   - No random elements - pure rhythmic patterns
-   - Each mark has purpose derived from the statement
+   - Complex multi-seed algorithm ensures each sigil is truly unique
+   - Line count varies (7-13) based on statement complexity
+   - Every mark positioned according to intricate rhythmic calculations
 
 ### Visualization Components
 
-1. **SigilCreator**: Ultra-minimal sigil generation
-   - Rhythmic pattern extraction from intent statements
-   - 2-6 line sigils inspired by TOPY Psychick Cross
+1. **SigilCreator**: Intricate rhythmic sigil generation
+   - Deep harmonic analysis of intent statements
+   - 7-13 line sigils with complex rhythmic patterns
    - Heavy strokes with square line caps
    - Photocopy filter effects
+   - Unique patterns based on vowel/consonant ratios and letter frequencies
 
-2. **SigilTransformationVisualizer**: 4-step rhythmic visualization
+2. **SigilTransformationVisualizer**: 4-step psychedelic visualization
    - Statement of Intent
-   - Rhythmic Extraction (core 3 letters)
-   - Phase Alignment (rhythm & angle visualization)
-   - Sigil Manifestation (final minimal form)
+   - Rhythmic Extraction (harmonic frequency analysis)
+   - Phase Alignment (psychedelic rhythm mandala with fractal waves)
+   - Sigil Manifestation (reality-bending emergence with afterglow effects)
 
 3. **SynchronicityWeb**: Force-directed graph showing event connections
    - D3.js force simulation
@@ -160,11 +163,12 @@ The app uses a brutalist TOPY-inspired aesthetic:
 - Modify `src/index.css` for typography and effects
 - Update component classes using: `btn-primary`, `btn-secondary`, `input-field`, `card`, `divider`
 
-**Working with Minimal Sigil Generation**:
-- Focus on extracting rhythmic essence, not complex transformations
-- Use deterministic calculations based on letter positions
-- Keep line count under 6 for maximum impact
+**Working with Intricate Sigil Generation**:
+- Extract deep rhythmic patterns through harmonic frequency analysis
+- Use multi-layered deterministic calculations (vowel/consonant ratios, letter frequencies)
+- Generate 7-13 lines for intricate, unique patterns
 - Square line caps and miter joins for sharp, decisive marks
+- Each paradigm has distinct geometric characteristics while maintaining complexity
 
 **Three.js 3D Components**:
 - Use `@react-three/fiber` components

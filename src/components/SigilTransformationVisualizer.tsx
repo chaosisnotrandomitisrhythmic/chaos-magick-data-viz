@@ -102,27 +102,81 @@ const SigilTransformationVisualizer: React.FC<SigilTransformationVisualizerProps
     };
 
     const generateMinimalSigil = (rhythm: number, phase: number): string => {
+        // Extract intricate rhythms from the statement
+        const cleanStatement = statement.toLowerCase().replace(/[^a-z]/g, '');
+        
+        // Calculate harmonic frequencies
+        const letterFreqs = new Map<string, number>();
+        for (const letter of cleanStatement) {
+            letterFreqs.set(letter, (letterFreqs.get(letter) || 0) + 1);
+        }
+        
+        const uniqueLetters = [...new Set(cleanStatement)];
+        const harmonics = uniqueLetters.slice(0, 8).map(letter => {
+            const freq = letterFreqs.get(letter) || 1;
+            return (letter.charCodeAt(0) - 97) * freq / cleanStatement.length;
+        });
+        
+        // Generate multiple phase angles for complexity
+        const phaseAngles = [];
+        for (let i = 0; i < Math.min(cleanStatement.length, 13); i++) {
+            const char = cleanStatement.charCodeAt(i);
+            phaseAngles.push((char * (i + 1) % 360) * Math.PI / 180);
+        }
+        
+        // Determine line count: 7-13 based on complexity
+        const vowels = cleanStatement.match(/[aeiou]/g) || [];
+        const consonants = cleanStatement.match(/[^aeiou]/g) || [];
+        const vowelRhythm = vowels.length / Math.max(cleanStatement.length, 1);
+        const complexity = (uniqueLetters.length / 26) * vowelRhythm * rhythm;
+        const lineCount = Math.min(Math.max(Math.floor(7 + complexity * 6), 7), 13);
+        
         let path = '';
         const center = { x: 100, y: 100 };
         const radius = 60;
-
-        // PURE PSYCHICK CROSS variant
-        const crossSize = radius * (0.6 + rhythm * 0.4);
-
-        // Main cross
+        
+        // INTRICATE PATTERN - 7-13 lines
+        const crossSize = radius * (0.5 + rhythm * 0.5);
+        
+        // Core structure
         path += `M ${center.x} ${center.y - crossSize} L ${center.x} ${center.y + crossSize} `;
         path += `M ${center.x - crossSize} ${center.y} L ${center.x + crossSize} ${center.y} `;
-
-        // Single power mark based on phase
-        if (rhythm > 0.3) {
-            const markRadius = crossSize * 0.7;
-            const x = center.x + Math.cos(phase) * markRadius;
-            const y = center.y + Math.sin(phase) * markRadius;
-
-            const cutSize = 8;
-            const cutAngle = phase + Math.PI / 4;
-            path += `M ${x - Math.cos(cutAngle) * cutSize} ${y - Math.sin(cutAngle) * cutSize} `;
-            path += `L ${x + Math.cos(cutAngle) * cutSize} ${y + Math.sin(cutAngle) * cutSize} `;
+        
+        let linesAdded = 2;
+        
+        // Add rhythmic marks based on harmonics
+        for (let i = 0; i < Math.min(phaseAngles.length, lineCount - 2); i++) {
+            const angle = phaseAngles[i];
+            const harmonic = harmonics[i % harmonics.length] || rhythm;
+            const distance = radius * (0.3 + harmonic * 0.4);
+            
+            if (i % 3 === 0) {
+                // Radial lines
+                const x1 = center.x + Math.cos(angle) * distance * 0.5;
+                const y1 = center.y + Math.sin(angle) * distance * 0.5;
+                const x2 = center.x + Math.cos(angle) * distance;
+                const y2 = center.y + Math.sin(angle) * distance;
+                path += `M ${x1} ${y1} L ${x2} ${y2} `;
+            } else if (i % 3 === 1) {
+                // Angular cuts
+                const x = center.x + Math.cos(angle) * distance;
+                const y = center.y + Math.sin(angle) * distance;
+                const cutSize = 5 + harmonic * 10;
+                const cutAngle = angle + Math.PI / 4;
+                path += `M ${x - Math.cos(cutAngle) * cutSize} ${y - Math.sin(cutAngle) * cutSize} `;
+                path += `L ${x + Math.cos(cutAngle) * cutSize} ${y + Math.sin(cutAngle) * cutSize} `;
+            } else {
+                // Connection lines
+                const prevAngle = phaseAngles[Math.max(0, i - 1)];
+                const x1 = center.x + Math.cos(prevAngle) * distance * 0.7;
+                const y1 = center.y + Math.sin(prevAngle) * distance * 0.7;
+                const x2 = center.x + Math.cos(angle) * distance * 0.7;
+                const y2 = center.y + Math.sin(angle) * distance * 0.7;
+                path += `M ${x1} ${y1} L ${x2} ${y2} `;
+            }
+            
+            linesAdded++;
+            if (linesAdded >= lineCount) break;
         }
 
         return path;

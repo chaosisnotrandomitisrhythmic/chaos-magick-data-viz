@@ -27,138 +27,277 @@ const SigilCreator = () => {
     };
 
     const generateRhythmicSigil = (statement: string, paradigm: string) => {
-        // Create deterministic seed from statement for consistent generation
+        // Deep rhythmic analysis of statement
         const cleanStatement = statement.toLowerCase().replace(/[^a-z]/g, '');
-        let seed = 0;
+        
+        // Create multiple seed values for intricate patterns
+        let seed1 = 0, seed2 = 0, seed3 = 0;
         for (let i = 0; i < cleanStatement.length; i++) {
-            seed += cleanStatement.charCodeAt(i) * (i + 1);
+            const char = cleanStatement.charCodeAt(i);
+            seed1 += char * (i + 1);
+            seed2 += char * char * (i + 1);
+            seed3 += Math.sin(char * (i + 1)) * 10000;
         }
 
-        // Simple seeded random function for consistent results
-        const seededRandom = () => {
-            seed = (seed * 9301 + 49297) % 233280;
-            return seed / 233280;
-        };
-
-        // Extract core rhythm - just the first 3 most significant letters
+        // Extract rhythmic frequencies from statement
+        const letterFreqs = new Map<string, number>();
+        for (const letter of cleanStatement) {
+            letterFreqs.set(letter, (letterFreqs.get(letter) || 0) + 1);
+        }
+        
+        // Calculate intricate rhythm patterns
+        const vowels = cleanStatement.match(/[aeiou]/g) || [];
+        const consonants = cleanStatement.match(/[^aeiou]/g) || [];
+        const vowelRhythm = vowels.length / Math.max(cleanStatement.length, 1);
+        const consonantDensity = consonants.length / Math.max(cleanStatement.length, 1);
+        
+        // Extract harmonic frequencies
         const uniqueLetters = [...new Set(cleanStatement)];
-        const coreLetters = uniqueLetters.slice(0, 3);
-
-        // Single rhythm value from statement essence
-        const rhythm = coreLetters.reduce((sum, letter) =>
-            sum + (letter.charCodeAt(0) - 97) / 25, 0
-        ) / Math.max(coreLetters.length, 1);
-
-        // Phase determines rotation/orientation
-        const phase = (seed % 8) * (Math.PI / 4); // 8 cardinal directions
-
+        const harmonics = uniqueLetters.map(letter => {
+            const freq = letterFreqs.get(letter) || 1;
+            return (letter.charCodeAt(0) - 97) * freq / cleanStatement.length;
+        });
+        
+        // Calculate primary rhythm from harmonics
+        const primaryRhythm = harmonics.reduce((sum, h) => sum + h, 0) / Math.max(harmonics.length, 1);
+        
+        // Generate phase angles based on letter patterns
+        const phaseAngles = [];
+        for (let i = 0; i < Math.min(cleanStatement.length, 13); i++) {
+            const char = cleanStatement.charCodeAt(i);
+            phaseAngles.push((char * (i + 1) % 360) * Math.PI / 180);
+        }
+        
+        // Determine line count: 7-13 based on statement complexity
+        const complexity = (uniqueLetters.length / 26) * vowelRhythm * consonantDensity;
+        const lineCount = Math.floor(7 + complexity * 6);
+        const actualLineCount = Math.min(Math.max(lineCount, 7), 13);
+        
         // SVG path
         let path = '';
         const center = { x: 100, y: 100 };
         const radius = 60;
 
         if (paradigm === 'chaos') {
-            // PURE PSYCHICK CROSS - Maximum 4 lines
-
-            // Core cross - size based on rhythm
-            const crossSize = radius * (0.6 + rhythm * 0.4);
-
-            // Main vertical stroke
+            // INTRICATE CHAOS CROSS - 7-13 lines based on rhythmic analysis
+            
+            // Core cross with variable thickness
+            const crossSize = radius * (0.5 + primaryRhythm * 0.5);
+            
+            // Main vertical stroke with rhythm modulation
             path += `M ${center.x} ${center.y - crossSize} L ${center.x} ${center.y + crossSize} `;
-
+            
             // Main horizontal stroke
             path += `M ${center.x - crossSize} ${center.y} L ${center.x + crossSize} ${center.y} `;
-
-            // Single power mark - position determined by phase
-            if (rhythm > 0.3) {
-                const markRadius = crossSize * 0.7;
-                const x = center.x + Math.cos(phase) * markRadius;
-                const y = center.y + Math.sin(phase) * markRadius;
-
-                // One diagonal cut
-                const cutSize = 8;
-                const cutAngle = phase + Math.PI / 4;
-                path += `M ${x - Math.cos(cutAngle) * cutSize} ${y - Math.sin(cutAngle) * cutSize} `;
-                path += `L ${x + Math.cos(cutAngle) * cutSize} ${y + Math.sin(cutAngle) * cutSize} `;
+            
+            // Add rhythmic marks based on harmonic frequencies
+            let linesAdded = 2;
+            
+            for (let i = 0; i < Math.min(phaseAngles.length, actualLineCount - 2); i++) {
+                const angle = phaseAngles[i];
+                const harmonic = harmonics[i % harmonics.length];
+                const distance = radius * (0.3 + harmonic * 0.4);
+                
+                if (i % 3 === 0) {
+                    // Radial lines
+                    const x1 = center.x + Math.cos(angle) * distance * 0.5;
+                    const y1 = center.y + Math.sin(angle) * distance * 0.5;
+                    const x2 = center.x + Math.cos(angle) * distance;
+                    const y2 = center.y + Math.sin(angle) * distance;
+                    path += `M ${x1} ${y1} L ${x2} ${y2} `;
+                } else if (i % 3 === 1) {
+                    // Angular cuts
+                    const x = center.x + Math.cos(angle) * distance;
+                    const y = center.y + Math.sin(angle) * distance;
+                    const cutSize = 5 + harmonic * 10;
+                    const cutAngle = angle + Math.PI / 4;
+                    path += `M ${x - Math.cos(cutAngle) * cutSize} ${y - Math.sin(cutAngle) * cutSize} `;
+                    path += `L ${x + Math.cos(cutAngle) * cutSize} ${y + Math.sin(cutAngle) * cutSize} `;
+                } else {
+                    // Connection lines
+                    const prevAngle = phaseAngles[Math.max(0, i - 1)];
+                    const x1 = center.x + Math.cos(prevAngle) * distance * 0.7;
+                    const y1 = center.y + Math.sin(prevAngle) * distance * 0.7;
+                    const x2 = center.x + Math.cos(angle) * distance * 0.7;
+                    const y2 = center.y + Math.sin(angle) * distance * 0.7;
+                    path += `M ${x1} ${y1} L ${x2} ${y2} `;
+                }
+                
+                linesAdded++;
+                if (linesAdded >= actualLineCount) break;
             }
 
         } else if (paradigm === 'hermetic') {
-            // TRIANGLE + DOT - Maximum 4 lines
+            // SACRED GEOMETRY - 7-13 lines with hermetic proportions
             const triRadius = radius * 0.8;
-
-            // Triangle - 3 lines
+            const innerRadius = triRadius * primaryRhythm;
+            
+            // Primary triangle
             for (let i = 0; i < 3; i++) {
-                const angle1 = phase + (i / 3) * Math.PI * 2 - Math.PI / 2;
-                const angle2 = phase + ((i + 1) % 3 / 3) * Math.PI * 2 - Math.PI / 2;
-
+                const angle1 = phaseAngles[0] + (i / 3) * Math.PI * 2 - Math.PI / 2;
+                const angle2 = phaseAngles[0] + ((i + 1) % 3 / 3) * Math.PI * 2 - Math.PI / 2;
+                
                 const x1 = center.x + Math.cos(angle1) * triRadius;
                 const y1 = center.y + Math.sin(angle1) * triRadius;
                 const x2 = center.x + Math.cos(angle2) * triRadius;
                 const y2 = center.y + Math.sin(angle2) * triRadius;
-
+                
                 path += `M ${x1} ${y1} L ${x2} ${y2} `;
             }
-
-            // Center mark if rhythm is strong
-            if (rhythm > 0.5) {
-                path += `M ${center.x - 3} ${center.y} L ${center.x + 3} ${center.y} `;
+            
+            let linesAdded = 3;
+            
+            // Inner triangle if rhythm permits
+            if (actualLineCount > 6 && primaryRhythm > 0.3) {
+                for (let i = 0; i < 3 && linesAdded < actualLineCount; i++) {
+                    const angle1 = phaseAngles[0] + (i / 3) * Math.PI * 2 + Math.PI / 6;
+                    const angle2 = phaseAngles[0] + ((i + 1) % 3 / 3) * Math.PI * 2 + Math.PI / 6;
+                    
+                    const x1 = center.x + Math.cos(angle1) * innerRadius;
+                    const y1 = center.y + Math.sin(angle1) * innerRadius;
+                    const x2 = center.x + Math.cos(angle2) * innerRadius;
+                    const y2 = center.y + Math.sin(angle2) * innerRadius;
+                    
+                    path += `M ${x1} ${y1} L ${x2} ${y2} `;
+                    linesAdded++;
+                }
+            }
+            
+            // Hermetic rays from vertices
+            for (let i = 0; i < harmonics.length && linesAdded < actualLineCount; i++) {
+                const vertexAngle = phaseAngles[0] + (i % 3 / 3) * Math.PI * 2 - Math.PI / 2;
+                const x1 = center.x + Math.cos(vertexAngle) * triRadius;
+                const y1 = center.y + Math.sin(vertexAngle) * triRadius;
+                const x2 = center.x + Math.cos(vertexAngle) * triRadius * 1.3;
+                const y2 = center.y + Math.sin(vertexAngle) * triRadius * 1.3;
+                
+                path += `M ${x1} ${y1} L ${x2} ${y2} `;
+                linesAdded++;
+            }
+            
+            // Center cross if still need lines
+            if (linesAdded < actualLineCount) {
+                path += `M ${center.x - 5} ${center.y} L ${center.x + 5} ${center.y} `;
+                linesAdded++;
+                if (linesAdded < actualLineCount) {
+                    path += `M ${center.x} ${center.y - 5} L ${center.x} ${center.y + 5} `;
+                }
             }
 
         } else if (paradigm === 'shamanic') {
-            // SPIRAL - Single continuous line
-            const points = 12; // Fixed for simplicity
+            // SPIRALING POWER - 7-13 lines with organic flow
             const maxRadius = radius * 0.9;
-            const turns = 1.5 + rhythm; // 1.5-2.5 turns
-
-            path += `M ${center.x} ${center.y} `;
-
-            for (let i = 1; i <= points; i++) {
-                const t = i / points;
-                const angle = phase + t * turns * Math.PI * 2;
+            const spiralTightness = 0.5 + primaryRhythm * 0.5;
+            const turns = 1.5 + vowelRhythm * 2; // 1.5-3.5 turns
+            
+            // Main spiral path
+            const spiralPoints = Math.min(actualLineCount * 2, 20);
+            let prevX = center.x;
+            let prevY = center.y;
+            
+            let linesAdded = 0;
+            
+            for (let i = 1; i <= spiralPoints && linesAdded < actualLineCount - 3; i++) {
+                const t = i / spiralPoints;
+                const angle = phaseAngles[0] + t * turns * Math.PI * 2;
+                const r = t * maxRadius * (1 + Math.sin(t * Math.PI * 4) * spiralTightness * 0.2);
+                const x = center.x + Math.cos(angle) * r;
+                const y = center.y + Math.sin(angle) * r;
+                
+                if (i % 2 === 1) {
+                    path += `M ${prevX} ${prevY} L ${x} ${y} `;
+                    linesAdded++;
+                }
+                
+                prevX = x;
+                prevY = y;
+            }
+            
+            // Power marks along spiral
+            for (let i = 0; i < harmonics.length && linesAdded < actualLineCount; i++) {
+                const t = (i + 1) / (harmonics.length + 1);
+                const angle = phaseAngles[0] + t * turns * Math.PI * 2;
                 const r = t * maxRadius;
                 const x = center.x + Math.cos(angle) * r;
                 const y = center.y + Math.sin(angle) * r;
-
-                path += `L ${x} ${y} `;
+                
+                // Cross marks
+                const markSize = 3 + harmonics[i] * 5;
+                if (linesAdded < actualLineCount) {
+                    path += `M ${x - markSize} ${y} L ${x + markSize} ${y} `;
+                    linesAdded++;
+                }
+                if (linesAdded < actualLineCount) {
+                    path += `M ${x} ${y - markSize} L ${x} ${y + markSize} `;
+                    linesAdded++;
+                }
             }
-
-            // Single terminus mark
-            const endAngle = phase + turns * Math.PI * 2;
-            const endX = center.x + Math.cos(endAngle) * maxRadius;
-            const endY = center.y + Math.sin(endAngle) * maxRadius;
-            path += `M ${endX - 4} ${endY - 4} L ${endX + 4} ${endY + 4} `;
+            
+            // Terminal flourish
+            if (linesAdded < actualLineCount) {
+                const endAngle = phaseAngles[0] + turns * Math.PI * 2;
+                const endX = center.x + Math.cos(endAngle) * maxRadius;
+                const endY = center.y + Math.sin(endAngle) * maxRadius;
+                path += `M ${endX - 6} ${endY - 6} L ${endX + 6} ${endY + 6} `;
+            }
 
         } else if (paradigm === 'cybernetic') {
-            // MINIMAL CIRCUIT - 3-4 nodes, 2-3 connections
-            const nodeCount = rhythm > 0.5 ? 3 : 2;
+            // COMPLEX CIRCUIT - 7-13 lines forming intricate network
+            const nodeCount = Math.min(Math.floor(3 + primaryRhythm * 3), 6);
             const nodes = [];
-
-            // Generate node positions
+            
+            // Generate node positions with rhythmic distribution
             for (let i = 0; i < nodeCount; i++) {
-                const angle = phase + (i / nodeCount) * Math.PI * 2;
-                const r = radius * 0.6;
+                const angleOffset = harmonics[i % harmonics.length] * Math.PI / 4;
+                const angle = phaseAngles[0] + (i / nodeCount) * Math.PI * 2 + angleOffset;
+                const r = radius * (0.4 + (i % 2) * 0.3 + harmonics[i % harmonics.length] * 0.2);
                 nodes.push({
                     x: center.x + Math.cos(angle) * r,
-                    y: center.y + Math.sin(angle) * r
+                    y: center.y + Math.sin(angle) * r,
+                    connections: []
                 });
             }
-
-            // Connect nodes in sequence
-            for (let i = 0; i < nodes.length - 1; i++) {
-                path += `M ${nodes[i].x} ${nodes[i].y} L ${nodes[i + 1].x} ${nodes[i + 1].y} `;
+            
+            let linesAdded = 0;
+            
+            // Create connection matrix based on rhythmic patterns
+            for (let i = 0; i < nodes.length && linesAdded < actualLineCount - nodeCount; i++) {
+                for (let j = i + 1; j < nodes.length && linesAdded < actualLineCount - nodeCount; j++) {
+                    const shouldConnect = (harmonics[i % harmonics.length] + harmonics[j % harmonics.length]) / 2 > 0.3;
+                    if (shouldConnect || (i === 0 && j === nodes.length - 1)) {
+                        path += `M ${nodes[i].x} ${nodes[i].y} L ${nodes[j].x} ${nodes[j].y} `;
+                        linesAdded++;
+                    }
+                }
             }
-
-            // Close circuit if rhythm is strong
-            if (rhythm > 0.4 && nodes.length > 2) {
-                path += `M ${nodes[nodes.length - 1].x} ${nodes[nodes.length - 1].y} L ${nodes[0].x} ${nodes[0].y} `;
+            
+            // Add data flow lines (partial connections)
+            for (let i = 0; i < harmonics.length && linesAdded < actualLineCount - nodeCount; i++) {
+                const node1 = nodes[i % nodes.length];
+                const node2 = nodes[(i + 1) % nodes.length];
+                const midX = (node1.x + node2.x) / 2 + Math.sin(phaseAngles[i]) * 10;
+                const midY = (node1.y + node2.y) / 2 + Math.cos(phaseAngles[i]) * 10;
+                
+                if (linesAdded < actualLineCount - nodeCount) {
+                    path += `M ${node1.x} ${node1.y} L ${midX} ${midY} `;
+                    linesAdded++;
+                }
             }
-
-            // Node marks
-            nodes.forEach(node => {
-                const size = 3;
-                path += `M ${node.x - size} ${node.y - size} L ${node.x + size} ${node.y + size} `;
-                path += `M ${node.x + size} ${node.y - size} L ${node.x - size} ${node.y + size} `;
-            });
+            
+            // Node representations (X marks)
+            for (let i = 0; i < nodes.length && linesAdded < actualLineCount; i++) {
+                const node = nodes[i];
+                const size = 2 + harmonics[i % harmonics.length] * 3;
+                
+                if (linesAdded < actualLineCount) {
+                    path += `M ${node.x - size} ${node.y - size} L ${node.x + size} ${node.y + size} `;
+                    linesAdded++;
+                }
+                if (linesAdded < actualLineCount) {
+                    path += `M ${node.x + size} ${node.y - size} L ${node.x - size} ${node.y + size} `;
+                    linesAdded++;
+                }
+            }
         }
 
         return path;
